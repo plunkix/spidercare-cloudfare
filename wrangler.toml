@@ -1,0 +1,14 @@
+name = "spidercare"
+main = "src/index.js"
+compatibility_date = "2023-12-01"
+
+# Add your account_id once you've created a Cloudflare account
+# account_id = "d904c79fd126afbc21d316b962a0e7c6"
+
+# When you're ready to integrate with an AI API, add environment variables:
+# [vars]
+# AI_ENABLED = "false"
+
+# For the full version with API integration, you'll use secrets
+# Add these with the Wrangler CLI:
+# wrangler secret put SPIDERCARE_API_KEY

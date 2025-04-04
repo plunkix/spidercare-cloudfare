@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpiderCare - Your Friendly Neighborhood Therapist</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            color: #333;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .header {
+            background-color: #e62429;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            max-width: 800px;
+            margin: 0 auto;
+            width: 100%;
+            background-color: white;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .message {
+            margin-bottom: 15px;
+            max-width: 80%;
+            padding: 10px 15px;
+            border-radius: 18px;
+            line-height: 1.4;
+            position: relative;
+        }
+        
+        .user-message {
+            background-color: #e6e6e6;
+            align-self: flex-end;
+        }
+        
+        .spider-message {
+            background-color: #e62429;
+            color: white;
+            align-self: flex-start;
+        }
+        
+        .spider-message::before {
+            content: "";
+            position: absolute;
+            left: -10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            border-right: 10px solid #e62429;
+        }
+        
+        .user-message::after {
+            content: "";
+            position: absolute;
+            right: -10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            border-left: 10px solid #e6e6e6;
+        }
+        
+        .chat-input {
+            display: flex;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-top: 1px solid #ddd;
+        }
+        
+        .chat-input input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            outline: none;
+            font-size: 16px;
+        }
+        
+        .chat-input button {
+            margin-left: 10px;
+            padding: 12px 20px;
+            background-color: #0d47a1;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .chat-input button:hover {
+            background-color: #0a3b8c;
+        }
+        
+        .spider-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #0d47a1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+        }
+        
+        .message-with-avatar {
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .spider-icon {
+            width: 25px;
+            height: 25px;
+            fill: white;
+        }
+        
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+        
+        .typing-indicator span {
+            height: 8px;
+            width: 8px;
+            margin: 0 1px;
+            background-color: #999;
+            border-radius: 50%;
+            display: inline-block;
+            opacity: 0.4;
+        }
+        
+        @keyframes blink {
+            0% { opacity: 0.4; }
+            50% { opacity: 1; }
+            100% { opacity: 0.4; }
+        }
+        
+        .typing-indicator span:nth-child(1) { animation: blink 1s infinite 0.33s; }
+        .typing-indicator span:nth-child(2) { animation: blink 1s infinite 0.66s; }
+        .typing-indicator span:nth-child(3) { animation: blink 1s infinite 0.99s; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>SpiderCare - Your Friendly Neighborhood Therapist</h1>
+    </div>
+    
+    <div class="chat-container">
+        <div class="chat-messages" id="chat-messages">
+            <div class="message-with-avatar">
+                <div class="spider-avatar">
+                    <svg class="spider-icon" viewBox="0 0 24 24">
+                        <path d="M16.5,5.5C17.6,5.5 18.5,4.6 18.5,3.5C18.5,2.4 17.6,1.5 16.5,1.5C15.4,1.5 14.5,2.4 14.5,3.5C14.5,4.6 15.4,5.5 16.5,5.5M12.9,19.4L13.9,15L16,17V23H18V15.5L15.9,13.5L16.5,10.5C17.89,12.09 19.89,13 22,13V11C20.24,11.03 18.6,10.11 17.7,8.6L16.7,7C16.34,6.4 15.7,6 15,6C14.7,6 14.5,6.1 14.2,6.1L9,8.3V13H11V9.6L12.8,8.9L11.2,17L6.3,16L5.9,18L12.9,19.4M4,9C3.45,9 3,8.55 3,8C3,7.45 3.45,7 4,7H7V9H4M5,5C4.45,5 4,4.55 4,4C4,3.45 4.45,3 5,3H10V5H5M2,11C1.45,11 1,10.55 1,10C1,9.45 1.45,9 2,9H7V11H2Z"/>
+                    </svg>
+                </div>
+                <div class="message spider-message">
+                    Hey there! Your friendly neighborhood Spider-Therapist here! What's going on in your world today that you'd like to talk about?
+                </div>
+            </div>
+        </div>
+        
+        <div class="chat-input">
+            <input type="text" id="user-input" placeholder="Type your message..." />
+            <button id="send-button">Send</button>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const chatMessages = document.getElementById('chat-messages');
+            const userInput = document.getElementById('user-input');
+            const sendButton = document.getElementById('send-button');
+            
+            // API endpoint - update with your Cloudflare Worker URL when deployed
+            // For local testing, use the hardcoded responses below
+            const API_ENDPOINT = 'https://spidercare.tathesrushti.workers.dev';
+            const USE_API = false; // Set to true when you've deployed your Worker
+            
+            // Sample responses from Spider-Man (fallback if API is not used)
+            const spiderResponses = [
+                "With great power comes great responsibility—and that includes taking care of your mental health! Tell me more about what you're feeling.",
+                "Sounds like you're swinging through some tough emotions there. I've been there too—juggling being Spider-Man and Peter Parker isn't always easy!",
+                "You know, my Aunt May always says that the hardest battles are fought in the mind. What strategies have helped you face challenges like this before?",
+                "Even superheroes have tough days. I remember when I was feeling overwhelmed with responsibility, I learned to break big problems into smaller ones—just like taking down villains one web at a time!",
+                "My spider-sense is telling me there's more to this story. What else is on your mind that might be contributing to these feelings?",
+                "That's really brave of you to share. Vulnerability is a superpower too, you know! How can I support you right now?",
+                "Sometimes I remind myself that I can't save everyone in New York City in one day. It's okay to focus on just one neighborhood at a time. What's one small step you could take today?",
+                "When I'm feeling stuck, I try to look at the situation from a different angle—sometimes literally hanging upside down! Have you considered viewing this challenge differently?",
+                "Balancing multiple responsibilities can feel like trying to stop a train with bare hands—trust me, I've actually done that and it's not fun! What could you let go of temporarily to make things more manageable?",
+                "You're doing better than you think. Remember, even Spider-Man falls sometimes—it's the getting back up that makes you strong!"
+            ];
+            
+            function addMessage(message, isUser = false) {
+                const messageElement = document.createElement('div');
+                
+                if (isUser) {
+                    messageElement.innerHTML = `<div class="message user-message">${message}</div>`;
+                    messageElement.classList.add('user-message-container');
+                } else {
+                    messageElement.innerHTML = `
+                        <div class="message-with-avatar">
+                            <div class="spider-avatar">
+                                <svg class="spider-icon" viewBox="0 0 24 24">
+                                    <path d="M16.5,5.5C17.6,5.5 18.5,4.6 18.5,3.5C18.5,2.4 17.6,1.5 16.5,1.5C15.4,1.5 14.5,2.4 14.5,3.5C14.5,4.6 15.4,5.5 16.5,5.5M12.9,19.4L13.9,15L16,17V23H18V15.5L15.9,13.5L16.5,10.5C17.89,12.09 19.89,13 22,13V11C20.24,11.03 18.6,10.11 17.7,8.6L16.7,7C16.34,6.4 15.7,6 15,6C14.7,6 14.5,6.1 14.2,6.1L9,8.3V13H11V9.6L12.8,8.9L11.2,17L6.3,16L5.9,18L12.9,19.4M4,9C3.45,9 3,8.55 3,8C3,7.45 3.45,7 4,7H7V9H4M5,5C4.45,5 4,4.55 4,4C4,3.45 4.45,3 5,3H10V5H5M2,11C1.45,11 1,10.55 1,10C1,9.45 1.45,9 2,9H7V11H2Z"/>
+                                </svg>
+                            </div>
+                            <div class="message spider-message">${message}</div>
+                        </div>
+                    `;
+                }
+                
+                chatMessages.appendChild(messageElement);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            
+            function showTypingIndicator() {
+                const typingElement = document.createElement('div');
+                typingElement.classList.add('message-with-avatar');
+                typingElement.id = 'typing-indicator';
+                typingElement.innerHTML = `
+                    <div class="spider-avatar">
+                        <svg class="spider-icon" viewBox="0 0 24 24">
+                            <path d="M16.5,5.5C17.6,5.5 18.5,4.6 18.5,3.5C18.5,2.4 17.6,1.5 16.5,1.5C15.4,1.5 14.5,2.4 14.5,3.5C14.5,4.6 15.4,5.5 16.5,5.5M12.9,19.4L13.9,15L16,17V23H18V15.5L15.9,13.5L16.5,10.5C17.89,12.09 19.89,13 22,13V11C20.24,11.03 18.6,10.11 17.7,8.6L16.7,7C16.34,6.4 15.7,6 15,6C14.7,6 14.5,6.1 14.2,6.1L9,8.3V13H11V9.6L12.8,8.9L11.2,17L6.3,16L5.9,18L12.9,19.4M4,9C3.45,9 3,8.55 3,8C3,7.45 3.45,7 4,7H7V9H4M5,5C4.45,5 4,4.55 4,4C4,3.45 4.45,3 5,3H10V5H5M2,11C1.45,11 1,10.55 1,10C1,9.45 1.45,9 2,9H7V11H2Z"/>
+                        </svg>
+                    </div>
+                    <div class="typing-indicator">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                `;
+                chatMessages.appendChild(typingElement);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            
+            function removeTypingIndicator() {
+                const typingIndicator = document.getElementById('typing-indicator');
+                if (typingIndicator) {
+                    typingIndicator.remove();
+                }
+            }
+            
+            async function getSpiderResponse(userMessage) {
+                if (USE_API) {
+                    try {
+                        const response = await fetch(`${API_ENDPOINT}/api/chat`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ message: userMessage })
+                        });
+                        
+                        const data = await response.json();
+                        return data.message;
+                    } catch (error) {
+                        console.error('Error fetching from API:', error);
+                        // Fallback to local responses
+                        return spiderResponses[Math.floor(Math.random() * spiderResponses.length)];
+                    }
+                } else {
+                    // Use local responses for the basic version
+                    return spiderResponses[Math.floor(Math.random() * spiderResponses.length)];
+                }
+            }
+            
+            async function handleUserMessage() {
+                const message = userInput.value.trim();
+                if (message === '') return;
+                
+                // Add user message
+                addMessage(message, true);
+                userInput.value = '';
+                
+                // Show typing indicator
+                showTypingIndicator();
+                
+                // Get Spider-Man's response (with artificial delay for realism)
+                setTimeout(async () => {
+                    removeTypingIndicator();
+                    const response = await getSpiderResponse(message);
+                    addMessage(response);
+                }, USE_API ? 1000 : Math.random() * 1000 + 1000);
+            }
+            
+            // Event listeners
+            sendButton.addEventListener('click', handleUserMessage);
+            userInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    handleUserMessage();
+                }
+            });
+            
+            // Optionally fetch a greeting from the API when the page loads
+            if (USE_API) {
+                fetch(`${API_ENDPOINT}/api/greeting`)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Replace the default greeting with one from the API
+                        const firstMessage = document.querySelector('.spider-message');
+                        if (firstMessage) {
+                            firstMessage.textContent = data.message;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching greeting:', error);
+                        // Keep the default greeting if there's an error
+                    });
+            }
+        });
+    </script>
+</body>
+</html>
