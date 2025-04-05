@@ -2,13 +2,12 @@ name = "spidercare"
 main = "src/index.js"
 compatibility_date = "2023-12-01"
 
-# Add your account_id once you've created a Cloudflare account
+# Account ID
 account_id = "d904c79fd126afbc21d316b962a0e7c6"
 
-# When you're ready to integrate with an AI API, add environment variables:
-# [vars]
-# AI_ENABLED = "false"
+# Enable API integration
+[vars]
+AI_ENABLED = "true"
 
-# For the full version with API integration, you'll use secrets
-# Add these with the Wrangler CLI:
+# Note: You'll need to add your Gemini API key as a secret using:
 # wrangler secret put SPIDERCARE_API_KEY

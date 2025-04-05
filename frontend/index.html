@@ -208,23 +208,8 @@
             const sendButton = document.getElementById('send-button');
             
             // API endpoint - update with your Cloudflare Worker URL when deployed
-            // For local testing, use the hardcoded responses below
             const API_ENDPOINT = 'https://spidercare.tathesrushti.workers.dev';
-            const USE_API = true; // Set to true when you've deployed your Worker
-            
-            // Sample responses from Spider-Man (fallback if API is not used)
-            const spiderResponses = [
-                "With great power comes great responsibility—and that includes taking care of your mental health! Tell me more about what you're feeling.",
-                "Sounds like you're swinging through some tough emotions there. I've been there too—juggling being Spider-Man and Peter Parker isn't always easy!",
-                "You know, my Aunt May always says that the hardest battles are fought in the mind. What strategies have helped you face challenges like this before?",
-                "Even superheroes have tough days. I remember when I was feeling overwhelmed with responsibility, I learned to break big problems into smaller ones—just like taking down villains one web at a time!",
-                "My spider-sense is telling me there's more to this story. What else is on your mind that might be contributing to these feelings?",
-                "That's really brave of you to share. Vulnerability is a superpower too, you know! How can I support you right now?",
-                "Sometimes I remind myself that I can't save everyone in New York City in one day. It's okay to focus on just one neighborhood at a time. What's one small step you could take today?",
-                "When I'm feeling stuck, I try to look at the situation from a different angle—sometimes literally hanging upside down! Have you considered viewing this challenge differently?",
-                "Balancing multiple responsibilities can feel like trying to stop a train with bare hands—trust me, I've actually done that and it's not fun! What could you let go of temporarily to make things more manageable?",
-                "You're doing better than you think. Remember, even Spider-Man falls sometimes—it's the getting back up that makes you strong!"
-            ];
+            const USE_API = true; // Always use the API now
             
             function addMessage(message, isUser = false) {
                 const messageElement = document.createElement('div');
@@ -277,26 +262,27 @@
             }
             
             async function getSpiderResponse(userMessage) {
-                if (USE_API) {
-                    try {
-                        const response = await fetch(`${API_ENDPOINT}/api/chat`, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({ message: userMessage })
-                        });
-                        
-                        const data = await response.json();
-                        return data.message;
-                    } catch (error) {
-                        console.error('Error fetching from API:', error);
-                        // Fallback to local responses
-                        return spiderResponses[Math.floor(Math.random() * spiderResponses.length)];
+                try {
+                    const response = await fetch(`${API_ENDPOINT}/api/chat`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ message: userMessage })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    // Check if there's an error message
+                    if (data.error) {
+                        return `My web-shooters are jammed! ${data.error} Let's try again in a moment.`;
                     }
-                } else {
-                    // Use local responses for the basic version
-                    return spiderResponses[Math.floor(Math.random() * spiderResponses.length)];
+                    
+                    return data.message;
+                } catch (error) {
+                    console.error('Error fetching from API:', error);
+                    // Return a friendly error message
+                    return "Oops! My web connection seems to be down. Can you try sending that again? Even Spider-Man has technical difficulties sometimes!";
                 }
             }
             
@@ -311,12 +297,12 @@
                 // Show typing indicator
                 showTypingIndicator();
                 
-                // Get Spider-Man's response (with artificial delay for realism)
+                // Get Spider-Man's response with a realistic typing delay
                 setTimeout(async () => {
-                    removeTypingIndicator();
                     const response = await getSpiderResponse(message);
+                    removeTypingIndicator();
                     addMessage(response);
-                }, USE_API ? 1000 : Math.random() * 1000 + 1000);
+                }, Math.random() * 1000 + 1500); // Random delay between 1.5-2.5 seconds for realism
             }
             
             // Event listeners
@@ -327,22 +313,20 @@
                 }
             });
             
-            // Optionally fetch a greeting from the API when the page loads
-            if (USE_API) {
-                fetch(`${API_ENDPOINT}/api/greeting`)
-                    .then(response => response.json())
-                    .then(data => {
-                        // Replace the default greeting with one from the API
-                        const firstMessage = document.querySelector('.spider-message');
-                        if (firstMessage) {
-                            firstMessage.textContent = data.message;
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error fetching greeting:', error);
-                        // Keep the default greeting if there's an error
-                    });
-            }
+            // Always fetch a greeting from the API when the page loads
+            fetch(`${API_ENDPOINT}/api/greeting`)
+                .then(response => response.json())
+                .then(data => {
+                    // Replace the default greeting with one from the API
+                    const firstMessage = document.querySelector('.spider-message');
+                    if (firstMessage) {
+                        firstMessage.textContent = data.message;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching greeting:', error);
+                    // Keep the default greeting if there's an error
+                });
         });
     </script>
 </body>
