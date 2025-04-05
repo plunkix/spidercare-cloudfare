@@ -3,139 +3,158 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SpiderCare - Your Friendly Neighborhood Therapist</title>
+    <title>SpiderCare - Your Friendly Support</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Arial', sans-serif;
+        :root {
+            --primary: #e62429;
+            --primary-dark: #cc1c21;
+            --secondary: #0d47a1;
+            --secondary-dark: #0a3b8c;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+        }
+        
+        * {
             margin: 0;
             padding: 0;
-            background-color: #f0f0f0;
-            color: #333;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--dark);
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             height: 100vh;
             display: flex;
             flex-direction: column;
         }
         
         .header {
-            background-color: #e62429;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
-            padding: 20px;
+            padding: 1.5rem;
             text-align: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 10;
         }
         
         .header h1 {
             margin: 0;
-            font-size: 24px;
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        
+        .app-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            width: 100%;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem;
         }
         
         .chat-container {
             flex: 1;
             display: flex;
             flex-direction: column;
-            max-width: 800px;
-            margin: 0 auto;
-            width: 100%;
             background-color: white;
-            border-radius: 0 0 10px 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
             overflow: hidden;
         }
         
         .chat-messages {
             flex: 1;
-            padding: 20px;
+            padding: 1.5rem;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
+            gap: 1rem;
         }
         
         .message {
-            margin-bottom: 15px;
-            max-width: 80%;
-            padding: 10px 15px;
+            max-width: 75%;
+            padding: 0.8rem 1.2rem;
             border-radius: 18px;
-            line-height: 1.4;
+            line-height: 1.5;
             position: relative;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
         }
         
         .user-message {
-            background-color: #e6e6e6;
+            background-color: var(--light-gray);
             align-self: flex-end;
+            border-bottom-right-radius: 4px;
         }
         
         .spider-message {
-            background-color: #e62429;
+            background-color: var(--primary);
             color: white;
             align-self: flex-start;
-        }
-        
-        .spider-message::before {
-            content: "";
-            position: absolute;
-            left: -10px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 0;
-            height: 0;
-            border-top: 10px solid transparent;
-            border-bottom: 10px solid transparent;
-            border-right: 10px solid #e62429;
-        }
-        
-        .user-message::after {
-            content: "";
-            position: absolute;
-            right: -10px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 0;
-            height: 0;
-            border-top: 10px solid transparent;
-            border-bottom: 10px solid transparent;
-            border-left: 10px solid #e6e6e6;
+            border-bottom-left-radius: 4px;
         }
         
         .chat-input {
             display: flex;
-            padding: 15px;
-            background-color: #f0f0f0;
-            border-top: 1px solid #ddd;
+            padding: 1rem;
+            background-color: var(--light);
+            border-top: 1px solid var(--light-gray);
         }
         
         .chat-input input {
             flex: 1;
-            padding: 12px;
+            padding: 0.8rem 1.2rem;
             border: 1px solid #ddd;
-            border-radius: 20px;
+            border-radius: 24px;
             outline: none;
-            font-size: 16px;
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+        }
+        
+        .chat-input input:focus {
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 2px rgba(13, 71, 161, 0.2);
         }
         
         .chat-input button {
-            margin-left: 10px;
-            padding: 12px 20px;
-            background-color: #0d47a1;
+            margin-left: 0.8rem;
+            padding: 0.8rem 1.5rem;
+            background: linear-gradient(90deg, var(--secondary) 0%, var(--secondary-dark) 100%);
             color: white;
             border: none;
-            border-radius: 20px;
+            border-radius: 24px;
             cursor: pointer;
-            font-weight: bold;
+            font-weight: 500;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
         }
         
         .chat-input button:hover {
-            background-color: #0a3b8c;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(13, 71, 161, 0.3);
+        }
+        
+        .chat-input button:active {
+            transform: translateY(0);
         }
         
         .spider-avatar {
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
-            background-color: #0d47a1;
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--secondary-dark) 100%);
             display: flex;
             align-items: center;
             justify-content: center;
             margin-right: 10px;
+            box-shadow: 0 2px 8px rgba(13, 71, 161, 0.3);
         }
         
         .message-with-avatar {
@@ -144,60 +163,76 @@
         }
         
         .spider-icon {
-            width: 25px;
-            height: 25px;
+            width: 20px;
+            height: 20px;
             fill: white;
         }
         
         .typing-indicator {
             display: flex;
             align-items: center;
-            margin-top: 10px;
+            margin: 0.5rem 0;
         }
         
         .typing-indicator span {
             height: 8px;
             width: 8px;
             margin: 0 1px;
-            background-color: #999;
+            background-color: white;
             border-radius: 50%;
             display: inline-block;
-            opacity: 0.4;
+            opacity: 0.6;
         }
         
         @keyframes blink {
-            0% { opacity: 0.4; }
-            50% { opacity: 1; }
-            100% { opacity: 0.4; }
+            0% { opacity: 0.4; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.2); }
+            100% { opacity: 0.4; transform: scale(0.8); }
         }
         
         .typing-indicator span:nth-child(1) { animation: blink 1s infinite 0.33s; }
         .typing-indicator span:nth-child(2) { animation: blink 1s infinite 0.66s; }
         .typing-indicator span:nth-child(3) { animation: blink 1s infinite 0.99s; }
+        
+        @media (max-width: 768px) {
+            .app-container {
+                padding: 0.8rem;
+            }
+            
+            .message {
+                max-width: 85%;
+            }
+            
+            .header h1 {
+                font-size: 1.2rem;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>SpiderCare - Your Friendly Neighborhood Therapist</h1>
+        <h1>SpiderCare - Your Friendly Support</h1>
     </div>
     
-    <div class="chat-container">
-        <div class="chat-messages" id="chat-messages">
-            <div class="message-with-avatar">
-                <div class="spider-avatar">
-                    <svg class="spider-icon" viewBox="0 0 24 24">
-                        <path d="M16.5,5.5C17.6,5.5 18.5,4.6 18.5,3.5C18.5,2.4 17.6,1.5 16.5,1.5C15.4,1.5 14.5,2.4 14.5,3.5C14.5,4.6 15.4,5.5 16.5,5.5M12.9,19.4L13.9,15L16,17V23H18V15.5L15.9,13.5L16.5,10.5C17.89,12.09 19.89,13 22,13V11C20.24,11.03 18.6,10.11 17.7,8.6L16.7,7C16.34,6.4 15.7,6 15,6C14.7,6 14.5,6.1 14.2,6.1L9,8.3V13H11V9.6L12.8,8.9L11.2,17L6.3,16L5.9,18L12.9,19.4M4,9C3.45,9 3,8.55 3,8C3,7.45 3.45,7 4,7H7V9H4M5,5C4.45,5 4,4.55 4,4C4,3.45 4.45,3 5,3H10V5H5M2,11C1.45,11 1,10.55 1,10C1,9.45 1.45,9 2,9H7V11H2Z"/>
-                    </svg>
-                </div>
-                <div class="message spider-message">
-                    Hey there! Your friendly neighborhood Spider-Therapist here! What's going on in your world today that you'd like to talk about?
+    <div class="app-container">
+        <div class="chat-container">
+            <div class="chat-messages" id="chat-messages">
+                <div class="message-with-avatar">
+                    <div class="spider-avatar">
+                        <svg class="spider-icon" viewBox="0 0 24 24">
+                            <path d="M16.5,5.5C17.6,5.5 18.5,4.6 18.5,3.5C18.5,2.4 17.6,1.5 16.5,1.5C15.4,1.5 14.5,2.4 14.5,3.5C14.5,4.6 15.4,5.5 16.5,5.5M12.9,19.4L13.9,15L16,17V23H18V15.5L15.9,13.5L16.5,10.5C17.89,12.09 19.89,13 22,13V11C20.24,11.03 18.6,10.11 17.7,8.6L16.7,7C16.34,6.4 15.7,6 15,6C14.7,6 14.5,6.1 14.2,6.1L9,8.3V13H11V9.6L12.8,8.9L11.2,17L6.3,16L5.9,18L12.9,19.4M4,9C3.45,9 3,8.55 3,8C3,7.45 3.45,7 4,7H7V9H4M5,5C4.45,5 4,4.55 4,4C4,3.45 4.45,3 5,3H10V5H5M2,11C1.45,11 1,10.55 1,10C1,9.45 1.45,9 2,9H7V11H2Z"/>
+                        </svg>
+                    </div>
+                    <div class="message spider-message">
+                        Hey there! I'm here to chat and support you. What's on your mind today?
+                    </div>
                 </div>
             </div>
-        </div>
-        
-        <div class="chat-input">
-            <input type="text" id="user-input" placeholder="Type your message..." />
-            <button id="send-button">Send</button>
+            
+            <div class="chat-input">
+                <input type="text" id="user-input" placeholder="Type your message..." />
+                <button id="send-button">Send</button>
+            </div>
         </div>
     </div>
     
@@ -275,14 +310,14 @@
                     
                     // Check if there's an error message
                     if (data.error) {
-                        return `My web-shooters are jammed! ${data.error} Let's try again in a moment.`;
+                        return `Looks like I'm having some technical difficulties. Let's try again in a moment.`;
                     }
                     
                     return data.message;
                 } catch (error) {
                     console.error('Error fetching from API:', error);
                     // Return a friendly error message
-                    return "Oops! My web connection seems to be down. Can you try sending that again? Even Spider-Man has technical difficulties sometimes!";
+                    return "Sorry about that - it seems we're having some connection issues. Can you try again?";
                 }
             }
             
@@ -302,7 +337,7 @@
                     const response = await getSpiderResponse(message);
                     removeTypingIndicator();
                     addMessage(response);
-                }, Math.random() * 1000 + 1500); // Random delay between 1.5-2.5 seconds for realism
+                }, Math.random() * 1000 + 1000); // Random delay between 1-2 seconds for realism
             }
             
             // Event listeners
@@ -313,7 +348,10 @@
                 }
             });
             
-            // Always fetch a greeting from the API when the page loads
+            // Focus input on page load
+            userInput.focus();
+            
+            // Fetch greeting from the API when the page loads
             fetch(`${API_ENDPOINT}/api/greeting`)
                 .then(response => response.json())
                 .then(data => {
