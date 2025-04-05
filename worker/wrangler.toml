@@ -11,3 +11,9 @@ AI_ENABLED = "true"
 
 # Note: You'll need to add your Gemini API key as a secret using:
 # wrangler secret put SPIDERCARE_API_KEY
+
+
+[[d1_databases]]
+binding = "DB" # This is the name you'll use in your Worker code
+database_name = "spidercare-db"
+database_id = "8d255ab4-cca0-4c69-b201-d85c167cee43"

@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SpiderCare - Your Friendly Support</title>
+    <title>Register - SpiderCare</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/landing.css">
+    <link rel="stylesheet" href="css/auth.css">
 </head>
 <body>
     <header>
@@ -17,46 +17,56 @@
             <h1>SpiderCare</h1>
         </div>
         <nav>
-            <a href="#features">Features</a>
-            <a href="#about">About</a>
-            <a href="login.html" class="nav-button">Login</a>
+            <a href="index.html">Home</a>
         </nav>
     </header>
 
-    <main>
-        <section class="hero">
-            <div class="hero-content">
-                <h1>Your Friendly Neighborhood Support</h1>
-                <p>Chat with Spider-Man for friendly advice and support when you need it most.</p>
-                <a href="login.html" class="cta-button">Get Started</a>
+    <main class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h2>Create Account</h2>
+                <p>Join SpiderCare for friendly support</p>
             </div>
-        </section>
-        
-        <section id="features" class="features">
-            <h2>Features</h2>
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <h3>Friendly Chat</h3>
-                    <p>Have supportive conversations with your friendly neighborhood Spider-Man</p>
+            
+            <!-- Alert messages will be displayed here -->
+            <div id="alert-container"></div>
+            
+            <form id="register-form">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required>
                 </div>
-                <div class="feature-card">
-                    <h3>Conversation History</h3>
-                    <p>Review past conversations and continue where you left off</p>
+                
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
                 </div>
-                <div class="feature-card">
-                    <h3>Personalization</h3>
-                    <p>Customize your experience with profile settings</p>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                    <small>Password must be at least 8 characters long</small>
                 </div>
+                
+                <div class="form-group">
+                    <label for="confirm-password">Confirm Password</label>
+                    <input type="password" id="confirm-password" name="confirm-password" required>
+                </div>
+                
+                <div class="form-options">
+                    <div class="remember-me">
+                        <input type="checkbox" id="terms" name="terms" required>
+                        <label for="terms">I agree to the <a href="terms.html">Terms of Service</a></label>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-full">Create Account</button>
+            </form>
+            
+            <div class="auth-footer">
+                <p>Already have an account? <a href="login.html">Login</a></p>
             </div>
-        </section>
-
-        <section id="about" class="about">
-            <h2>About SpiderCare</h2>
-            <div class="about-content">
-                <p>SpiderCare combines the friendly charm of Spider-Man with an empathetic listening ear. Whether you need a supportive friend, advice, or just someone to talk to, your friendly neighborhood Spider-Man is here to help.</p>
-                <p>Our AI assistant brings the relatable, down-to-earth perspective of Peter Parker to every conversation, making sure you feel heard and supported.</p>
-            </div>
-        </section>
+        </div>
     </main>
 
     <footer>
@@ -75,5 +85,8 @@
         </div>
         <p class="copyright">&copy; 2025 SpiderCare. All rights reserved.</p>
     </footer>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
 </body>
 </html>
