@@ -11,7 +11,10 @@ import {
   searchConversations,
   getUserSettings
 } from '../services/database.js';
-import { v4 as uuidv4 } from 'uuid';
+// UUID v4 implementation using the crypto API
+function uuidv4() {
+    return crypto.randomUUID();
+  }
 
 // Greeting messages
 const GREETING_MESSAGES = [
