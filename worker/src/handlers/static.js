@@ -26,12 +26,13 @@ const contentTypes = {
 // Serve static files
 export async function handleServeStatic(request, env, path) {
   // Default to index.html for root path
-  if (path === '' || path === '/') {
+  if (!path || path === '' || path === '/') {
     path = 'index.html';
   }
   
-  // Determine content type based on file extension
-  const extension = path.substring(path.lastIndexOf('.') || 0);
+  // Safely get extension
+  const lastDotIndex = path.lastIndexOf('.');
+  const extension = lastDotIndex !== -1 ? path.substring(lastDotIndex) : '';
   const contentType = contentTypes[extension] || 'text/plain';
   
   try {

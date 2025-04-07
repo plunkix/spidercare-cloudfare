@@ -98,8 +98,15 @@ export async function callGeminiAPI(userMessage, env) {
   }
 }
 
+// Gemini mock response function (add this code to your existing gemini.js file)
+
 // Mock responses for testing without API
 function getRandomMockResponse(userMessage) {
+  // Add null check to prevent errors
+  if (!userMessage) {
+    userMessage = "";
+  }
+  
   const mockResponses = [
     "I totally get that! Life can be a bit like swinging between buildings - sometimes exhilarating, sometimes scary, but always moving forward. What specific part of this situation is bothering you the most?",
     
